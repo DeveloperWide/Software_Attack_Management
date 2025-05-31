@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+
+input{
+    @apply border border-gray-600 m-2 px-3 py-1 rounded;
+}
+
+label{
+    @apply text-teal-100
+}
