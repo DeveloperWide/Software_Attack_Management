@@ -13,7 +13,6 @@ const userSchema = new Schema({
         required: true,
         unique: true,
         lowercase: true,
-        trim: true,
     },
     password:{
         type: String,
@@ -26,20 +25,21 @@ const userSchema = new Schema({
 });
 
 
-userSchema.pre("save", async () => {
-    const user = this;
+userSchema.pre("save", async function (next) {
+  const user = this;
 
-    if(!user.isModified("password")) return next();
+  if (!user.isModified("password")) return next();
 
-    try{
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hashedPassword = await bcrypt.hash(user.password , salt);
-        user.password = hashedPassword;
-        next();
-    }catch(err){
-        return next(err);
-    }
-})
+  try {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+    next();
+  } catch (err) {
+    return next(err);
+  }
+});
+
 
 const User = model("User", userSchema);
 module.exports = User;
